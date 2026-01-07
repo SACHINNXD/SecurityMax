@@ -25,10 +25,16 @@ body {
 .nav-logo {
     position: absolute;
     left: 32px;
-    font-size: 20px;
-    font-weight: 700;
-    color: #000;
-    text-decoration: none;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+}
+
+.nav-logo img {
+    max-height: 34px;   /* HARD LIMIT — prevents overflow */
+    width: auto;
+    display: block;
 }
 
 .nav-links {
@@ -56,3 +62,4 @@ body {
 main {
     min-height: calc(100vh - 60px);
 }
+
