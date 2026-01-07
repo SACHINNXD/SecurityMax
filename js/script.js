@@ -1,51 +1,72 @@
-// ===================================================================
+// =======================================================
 // Security Max Dashboard Script
-// FULL FILE – SAFE TO REPLACE
-// ===================================================================
+// Compatible with provided dashboard.html
+// =======================================================
 
+const loginBtn = document.getElementById("loginBtn");
+const userInfo = document.getElementById("userInfo");
+const usernameEl = document.getElementById("username");
+const welcomeName = document.getElementById("welcomeName");
 const serversContainer = document.getElementById("servers");
-const userNameEl = document.getElementById("user-name");
-const userAvatarEl = document.getElementById("user-avatar");
 
-// ------------------------------------------------
-// Fetch logged-in user info
-// ------------------------------------------------
-async function fetchUser() {
-  const res = await fetch("/.netlify/functions/me", {
-    credentials: "include"
-  });
+async function loadDashboard() {
+  let res;
 
-  if (!res.ok) {
-    window.location.href = "/";
-    return null;
-  }
-
-  return res.json();
-}
-
-// ------------------------------------------------
-// Render servers
-// ------------------------------------------------
-function renderServers(guilds) {
-  serversContainer.innerHTML = "";
-
-  const manageable = guilds.filter(g =>
-    g.owner || (Number(g.permissions) & 0x20)
-  );
-
-  if (manageable.length === 0) {
-    serversContainer.innerHTML =
-      "<p>No manageable servers found.</p>";
+  try {
+    res = await fetch("/.netlify/functions/me", {
+      credentials: "include"
+    });
+  } catch (err) {
+    console.error("Failed to reach /me");
     return;
   }
 
-  manageable.forEach(server => {
+  if (!res.ok) {
+    console.log("Not logged in");
+    return;
+  }
+
+  const data = await res.json();
+
+  if (!data.loggedIn) {
+    console.log("User not logged in");
+    return;
+  }
+
+  const { user, guilds } = data;
+
+  // -------------------------------
+  // Update navbar auth section
+  // -------------------------------
+  loginBtn.style.display = "none";
+  userInfo.style.display = "inline-block";
+
+  const fullName = `${user.username}#${user.discriminator}`;
+  usernameEl.textContent = fullName;
+  welcomeName.textContent = user.username.toUpperCase();
+
+  // -------------------------------
+  // Render servers
+  // -------------------------------
+  renderServers(guilds);
+}
+
+function renderServers(guilds) {
+  serversContainer.innerHTML = "";
+
+  const manageableServers = guilds.filter(
+    g => g.owner || (Number(g.permissions) & 0x20)
+  );
+
+  if (manageableServers.length === 0) {
+    serversContainer.innerHTML =
+      "<p class='no-servers'>No manageable servers found.</p>";
+    return;
+  }
+
+  manageableServers.forEach(server => {
     const card = document.createElement("div");
     card.className = "server-card";
-
-    card.addEventListener("click", () => {
-      window.location.href = `/server.html?guild=${server.id}`;
-    });
 
     const icon = server.icon
       ? `https://cdn.discordapp.com/icons/${server.id}/${server.icon}.png`
@@ -53,27 +74,16 @@ function renderServers(guilds) {
 
     card.innerHTML = `
       <img src="${icon}" alt="Server Icon">
-      <h3>${server.name}</h3>
+      <span>${server.name}</span>
     `;
+
+    card.addEventListener("click", () => {
+      window.location.href = `/server.html?guild=${server.id}`;
+    });
 
     serversContainer.appendChild(card);
   });
 }
 
-// ------------------------------------------------
-// Init
-// ------------------------------------------------
-async function initDashboard() {
-  const data = await fetchUser();
-  if (!data) return;
-
-  const user = data.user;
-  const guilds = data.guilds;
-
-  userNameEl.textContent = `${user.username}#${user.discriminator}`;
-  userAvatarEl.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
-
-  renderServers(guilds);
-}
-
-initDashboard();
+// Init on load
+loadDashboard();
