@@ -1,7 +1,13 @@
 export async function handler() {
   const clientId = process.env.CLIENT_ID;
 
-  // 🔒 HARD-CODED, SAFE
+  if (!clientId) {
+    return {
+      statusCode: 500,
+      body: "CLIENT_ID is missing in environment variables"
+    };
+  }
+
   const redirectUri =
     "https://securitymax-bot.netlify.app/.netlify/functions/callback";
 
