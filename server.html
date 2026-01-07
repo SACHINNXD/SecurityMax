@@ -1,19 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Server Panel | Security Max</title>
-  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body {
+      background: #0b0f1a;
+      color: #fff;
+      font-family: Inter, sans-serif;
+      margin: 0;
+    }
+
+    .center {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .spinner {
+      width: 60px;
+      height: 60px;
+      border: 6px solid #222;
+      border-top: 6px solid #5865F2;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .btn {
+      margin-top: 20px;
+      padding: 14px 22px;
+      background: #5865F2;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .panel {
+      padding: 40px;
+    }
+  </style>
 </head>
 <body>
 
-  <div id="server-root" class="centered-box">
-    <div class="loader">
-      <h2>Verifying server…</h2>
-      <p>Please wait</p>
-    </div>
-  </div>
+<!-- VERIFY -->
+<div id="verify" class="center">
+  <div class="spinner"></div>
+  <h2>Verifying server…</h2>
+  <p>Please wait</p>
+</div>
 
-  <script src="/server.js"></script>
+<!-- BOT NOT IN SERVER -->
+<div id="invite" class="center" style="display:none;">
+  <h2>Bot is not in this server</h2>
+  <p>Add Security Max to continue</p>
+  <a id="inviteLink" class="btn">Invite Security Max Bot</a>
+</div>
+
+<!-- SERVER PANEL -->
+<div id="panel" class="panel" style="display:none;">
+  <h1>Server Control Panel</h1>
+  <p>Security Max is active in this server.</p>
+</div>
+
+<script src="/js/server.js"></script>
 </body>
 </html>
