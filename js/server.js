@@ -1,11 +1,7 @@
-// ===============================
-// Server Verification Logic
-// ===============================
-
 const params = new URLSearchParams(window.location.search);
 const guildId = params.get("guild");
 
-// DOM elements
+// Elements
 const verify = document.getElementById("verify");
 const invite = document.getElementById("invite");
 const panel = document.getElementById("panel");
@@ -14,57 +10,39 @@ const serverName = document.getElementById("serverName");
 const serverIcon = document.getElementById("serverIcon");
 const inviteLink = document.getElementById("inviteLink");
 
-// -------------------------------
-// Validate guild ID
-// -------------------------------
 if (!guildId) {
-  verify.innerHTML = "<h2>Invalid server</h2><p>No guild ID provided.</p>";
+  verify.innerHTML = "<h2>Invalid server</h2>";
   throw new Error("Missing guild ID");
 }
 
-// -------------------------------
-// Start verification (smooth UX)
-// -------------------------------
-setTimeout(checkServer, 1200);
+// Small delay for UX
+setTimeout(checkServer, 1000);
 
-// -------------------------------
-// Main verification function
-// -------------------------------
 async function checkServer() {
   try {
+    // ✅ CORRECT FUNCTION PATH
     const res = await fetch(
       `/.netlify/functions/checkBot?guild=${guildId}`
     );
 
-    // If Netlify function failed
     if (!res.ok) {
       verify.innerHTML =
         "<h2>Verification failed</h2><p>Please refresh or try again later.</p>";
       return;
     }
 
-    // Safely parse JSON
-    let data;
-    try {
-      data = await res.json();
-    } catch (err) {
-      verify.innerHTML =
-        "<h2>Server error</h2><p>Invalid response from server.</p>";
-      return;
-    }
+    const data = await res.json();
 
-    // Stop spinner
+    // Stop loading
     verify.style.display = "none";
 
-    // -------------------------------
-    // Bot is in the server
-    // -------------------------------
+    // ✅ BOT IS IN SERVER
     if (data.botInServer) {
       panel.style.display = "block";
 
-      serverName.textContent = data.guild?.name || "Server";
+      serverName.textContent = data.guild.name;
 
-      if (data.guild?.icon) {
+      if (data.guild.icon) {
         serverIcon.src =
           `https://cdn.discordapp.com/icons/${data.guild.id}/${data.guild.icon}.png`;
       } else {
@@ -74,11 +52,8 @@ async function checkServer() {
       return;
     }
 
-    // -------------------------------
-    // Bot NOT in server → Invite
-    // -------------------------------
+    // ❌ BOT NOT IN SERVER
     invite.style.display = "flex";
-
     inviteLink.href =
       `https://discord.com/oauth2/authorize` +
       `?client_id=1457942798644019348` +
@@ -88,7 +63,7 @@ async function checkServer() {
       `&disable_guild_select=true`;
 
   } catch (err) {
-    console.error("Verification error:", err);
+    console.error(err);
     verify.innerHTML =
       "<h2>Unexpected error</h2><p>Please try again.</p>";
   }
