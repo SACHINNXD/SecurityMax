@@ -1,3 +1,7 @@
+/* ===============================
+   GLOBAL
+================================ */
+
 * {
     margin: 0;
     padding: 0;
@@ -56,6 +60,38 @@ body {
 
 .nav-links a.active {
     font-weight: 700;
+    color: #000000;
+}
+
+/* ===============================
+   DASHBOARD AUTH (LOGIN)
+================================ */
+
+.auth-area {
+    position: absolute;
+    right: 56px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.login-btn {
+    padding: 10px 18px;
+    background: #5865f2;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(88, 101, 242, 0.4);
+}
+
+.user-info {
+    font-size: 16px;
+    font-weight: 600;
     color: #000000;
 }
 
@@ -154,10 +190,9 @@ body {
 ================================ */
 
 .features-title-wrapper {
-    width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 140px;   /* ⬅️ MORE SPACE FROM ANNOUNCEMENT */
+    margin-top: 140px; /* farther from announcement */
     margin-bottom: 60px;
 }
 
