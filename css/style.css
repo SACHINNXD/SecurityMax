@@ -9,7 +9,10 @@ body {
     background: #ffffff;
 }
 
-/* Navbar */
+/* ===============================
+   NAVBAR
+================================ */
+
 .navbar {
     height: 88px;
     width: 100%;
@@ -22,13 +25,12 @@ body {
     padding: 0 56px;
 }
 
-/* Text logo (top-left) */
 .nav-logo {
     position: absolute;
     left: 56px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 30px;        /* BIG TEXT */
+    font-size: 30px;
     font-weight: 800;
     letter-spacing: 1px;
     color: #000000;
@@ -36,7 +38,6 @@ body {
     white-space: nowrap;
 }
 
-/* Navigation links */
 .nav-links {
     list-style: none;
     display: flex;
@@ -60,6 +61,49 @@ body {
     font-weight: 700;
 }
 
-main {
+/* ===============================
+   HOME HERO SECTION
+================================ */
+
+.home-hero {
+    display: flex;
+    align-items: center;
     min-height: calc(100vh - 88px);
+    padding-left: 80px;
+}
+
+.hero-content {
+    max-width: 520px;
+}
+
+.hero-content h1 {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: #000000;
+}
+
+.hero-content p {
+    font-size: 18px;
+    color: #374151;
+    line-height: 1.6;
+    margin-bottom: 32px;
+}
+
+/* CTA Button */
+.hero-button {
+    display: inline-block;
+    padding: 16px 36px;
+    background: #000000;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero-button:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
 }
