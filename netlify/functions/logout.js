@@ -3,7 +3,7 @@ export async function handler() {
     statusCode: 302,
     headers: {
       "Set-Cookie":
-        "user=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax; Secure",
+        "user=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax; Secure",
       Location: "/"
     }
   };
