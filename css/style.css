@@ -67,13 +67,15 @@ body {
 
 .home-hero {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     min-height: calc(100vh - 88px);
-    padding-left: 80px;
+    padding: 0 80px;
 }
 
 .hero-content {
     max-width: 540px;
+    margin-top: 80px;
 }
 
 .hero-content h1 {
@@ -91,6 +93,7 @@ body {
 }
 
 /* CTA Button */
+
 .hero-button {
     display: inline-block;
     padding: 16px 36px;
@@ -109,12 +112,20 @@ body {
 }
 
 /* ===============================
-   ANNOUNCEMENT CARD
+   ANNOUNCEMENT (CENTERED + LONG)
 ================================ */
 
+.announcement-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 80px;
+}
+
 .announcement-card {
-    margin-top: 48px;
-    padding: 28px 32px;
+    width: 100%;
+    max-width: 1000px;      /* LONG */
+    padding: 22px 36px;     /* NOT FAT */
     border-radius: 16px;
     background: linear-gradient(135deg, #0f172a, #020617);
     color: #e5e7eb;
@@ -126,7 +137,6 @@ body {
         border-color 0.25s ease;
 }
 
-/* Hover effect like reference */
 .announcement-card:hover {
     transform: translateY(-6px);
     box-shadow: 0 30px 60px rgba(59, 130, 246, 0.35);
@@ -142,24 +152,24 @@ body {
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.5px;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 }
 
 .announcement-date {
     font-size: 13px;
     color: #9ca3af;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .announcement-card h2 {
     font-size: 22px;
     font-weight: 700;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     color: #ffffff;
 }
 
 .announcement-card p {
     font-size: 15px;
-    line-height: 1.6;
+    line-height: 1.5;
     color: #d1d5db;
 }
