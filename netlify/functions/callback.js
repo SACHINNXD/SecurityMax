@@ -1,7 +1,6 @@
-import fetch from "node-fetch";
-
 export async function handler(event) {
     const code = event.queryStringParameters?.code;
+
     if (!code) {
         return {
             statusCode: 302,
@@ -25,7 +24,7 @@ export async function handler(event) {
         });
 
         const token = await tokenRes.json();
-        if (!token.access_token) throw new Error("No token");
+        if (!token.access_token) throw new Error("Token exchange failed");
 
         const userRes = await fetch("https://discord.com/api/users/@me", {
             headers: {
@@ -41,8 +40,8 @@ export async function handler(event) {
                 "Set-Cookie": `user=${encodeURIComponent(JSON.stringify({
                     id: user.id,
                     username: user.username,
-                    email: user.email,
-                    avatar: user.avatar
+                    avatar: user.avatar,
+                    email: user.email
                 }))}; Path=/; HttpOnly; SameSite=Lax; Secure`,
                 Location: "/dashboard.html"
             }
