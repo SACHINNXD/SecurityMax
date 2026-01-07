@@ -8,10 +8,8 @@
 <body>
 
 <nav class="navbar">
-    <!-- LEFT: LOGO -->
     <a href="/" class="nav-logo">Security Max</a>
 
-    <!-- CENTER: NAV LINKS -->
     <ul class="nav-links">
         <li><a href="/">Home</a></li>
         <li><a href="/setup.html">Setup</a></li>
@@ -19,30 +17,43 @@
         <li><a href="/dashboard.html" class="active">Dashboard</a></li>
     </ul>
 
-    <!-- RIGHT: AUTH AREA -->
     <div class="auth-area">
-        <!-- LOGIN BUTTON -->
-        <a
-            href="/.netlify/functions/login"
-            class="login-btn"
-            id="loginBtn"
-        >
+        <a href="/.netlify/functions/login" class="login-btn" id="loginBtn">
             Login with Discord
         </a>
 
-        <!-- USER INFO (HIDDEN BY DEFAULT) -->
         <div class="user-info" id="userInfo" style="display:none;">
             <span id="username"></span>
             |
-            <a href="/.netlify/functions/logout" style="text-decoration:none; color:#5865f2;">
-                Logout
-            </a>
+            <a href="/.netlify/functions/logout">Logout</a>
         </div>
     </div>
 </nav>
 
-<main style="padding: 80px;">
-    <!-- Dashboard content will go here later -->
+<main class="dashboard">
+
+    <!-- WELCOME -->
+    <section class="welcome">
+        <p class="welcome-small">WELCOME BACK,</p>
+        <h1 id="welcomeName">User</h1>
+        <p class="welcome-sub">Where would you like to start?</p>
+
+        <div class="dashboard-tabs">
+            <button class="tab active">SERVERS</button>
+        </div>
+    </section>
+
+    <!-- SERVERS -->
+    <section class="servers-section">
+        <h2 class="servers-title">
+            <span>YOUR</span> SERVERS
+        </h2>
+
+        <div id="servers" class="servers-grid">
+            <!-- Filled by JS -->
+        </div>
+    </section>
+
 </main>
 
 <script src="/js/script.js"></script>
