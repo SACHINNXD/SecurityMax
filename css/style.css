@@ -73,7 +73,7 @@ body {
 }
 
 .hero-content {
-    max-width: 520px;
+    max-width: 540px;
 }
 
 .hero-content h1 {
@@ -106,4 +106,60 @@ body {
 .hero-button:hover {
     transform: scale(1.08);
     box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+}
+
+/* ===============================
+   ANNOUNCEMENT CARD
+================================ */
+
+.announcement-card {
+    margin-top: 48px;
+    padding: 28px 32px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #0f172a, #020617);
+    color: #e5e7eb;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+/* Hover effect like reference */
+.announcement-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 30px 60px rgba(59, 130, 246, 0.35);
+    border-color: rgba(59, 130, 246, 0.6);
+}
+
+.announcement-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+}
+
+.announcement-date {
+    font-size: 13px;
+    color: #9ca3af;
+    margin-bottom: 10px;
+}
+
+.announcement-card h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #ffffff;
+}
+
+.announcement-card p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #d1d5db;
 }
