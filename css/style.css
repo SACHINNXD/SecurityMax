@@ -7,26 +7,26 @@
 
 /* Page background */
 body {
-    background: #10b981; /* Emerald Green */
+    background: #ffffff;
 }
 
 /* Navbar */
 .navbar {
-    height: 72px;
+    height: 80px;                 /* Taller navbar */
     width: 100%;
     background: #ffffff;
-    border-bottom: 1px solid #e6e6e6;
+    border-bottom: 1px solid #e5e7eb;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    padding: 0 40px;
+    padding: 0 48px;
 }
 
-/* Logo (top-left) */
+/* Logo (BIG & top-left) */
 .nav-logo {
     position: absolute;
-    left: 40px;
+    left: 48px;
     top: 50%;
     transform: translateY(-50%);
     display: flex;
@@ -34,7 +34,7 @@ body {
 }
 
 .nav-logo img {
-    height: 48px;          /* GOOD, VISIBLE SIZE */
+    height: 60px;                 /* BIG LOGO */
     width: auto;
     display: block;
 }
@@ -43,27 +43,27 @@ body {
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 32px;
+    gap: 36px;
 }
 
 .nav-links a {
     text-decoration: none;
     color: #374151;
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 500;
     transition: color 0.2s ease;
 }
 
 .nav-links a:hover {
-    color: #000;
+    color: #000000;
 }
 
 .nav-links a.active {
-    color: #000;
+    color: #000000;
     font-weight: 700;
 }
 
-/* Page body spacing */
+/* Page body */
 main {
-    min-height: calc(100vh - 72px);
+    min-height: calc(100vh - 80px);
 }
