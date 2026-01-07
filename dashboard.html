@@ -8,8 +8,10 @@
 <body>
 
 <nav class="navbar">
+    <!-- LEFT: LOGO -->
     <a href="/" class="nav-logo">Security Max</a>
 
+    <!-- CENTER: NAV LINKS -->
     <ul class="nav-links">
         <li><a href="/">Home</a></li>
         <li><a href="/setup.html">Setup</a></li>
@@ -17,23 +19,31 @@
         <li><a href="/dashboard.html" class="active">Dashboard</a></li>
     </ul>
 
-    <!-- LOGIN / USER AREA -->
+    <!-- RIGHT: AUTH AREA -->
     <div class="auth-area">
+        <!-- LOGIN BUTTON -->
         <a
-            href="https://discord.com/oauth2/authorize?client_id=1457942798644019349&response_type=code&scope=identify%20email&redirect_uri=YOUR_REDIRECT_URL"
+            href="/.netlify/functions/login"
             class="login-btn"
             id="loginBtn"
         >
             Login with Discord
         </a>
 
+        <!-- USER INFO (HIDDEN BY DEFAULT) -->
         <div class="user-info" id="userInfo" style="display:none;">
             <span id="username"></span>
+            |
+            <a href="/.netlify/functions/logout" style="text-decoration:none; color:#5865f2;">
+                Logout
+            </a>
         </div>
     </div>
 </nav>
 
-<main></main>
+<main style="padding: 80px;">
+    <!-- Dashboard content will go here later -->
+</main>
 
 <script src="/js/script.js"></script>
 </body>
