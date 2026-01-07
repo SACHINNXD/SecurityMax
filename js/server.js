@@ -1,41 +1,48 @@
 const params = new URLSearchParams(window.location.search);
 const guildId = params.get("guild");
 
-const verifyEl = document.getElementById("verify");
-const inviteEl = document.getElementById("invite");
-const panelEl = document.getElementById("panel");
+const verify = document.getElementById("verify");
+const invite = document.getElementById("invite");
+const panel = document.getElementById("panel");
+
+const serverName = document.getElementById("serverName");
+const serverIcon = document.getElementById("serverIcon");
 const inviteLink = document.getElementById("inviteLink");
 
 if (!guildId) {
-  verifyEl.innerHTML = "<h2>Invalid server</h2>";
+  verify.innerHTML = "<h2>Invalid server</h2>";
   throw new Error("Missing guild ID");
 }
 
-// Fake delay for smooth UX
-setTimeout(checkBot, 1500);
+// Smooth UX delay
+setTimeout(checkServer, 1200);
 
-async function checkBot() {
+async function checkServer() {
   const res = await fetch(
-    `/.netlify/functions/checkBot?guild=${guildId}`,
-    { credentials: "include" }
+    `/.netlify/functions/checkBot?guild=${guildId}`
   );
 
   const data = await res.json();
 
-  verifyEl.style.display = "none";
-
-  if (!data.loggedIn) {
-    window.location.href = "/";
-    return;
-  }
+  verify.style.display = "none";
 
   if (data.botInServer) {
-    panelEl.style.display = "block";
+    // Show minimal panel
+    panel.style.display = "block";
+
+    serverName.textContent = data.guild.name;
+
+    if (data.guild.icon) {
+      serverIcon.src =
+        `https://cdn.discordapp.com/icons/${data.guild.id}/${data.guild.icon}.png`;
+    }
+
   } else {
-    inviteEl.style.display = "flex";
+    // Show invite screen
+    invite.style.display = "flex";
     inviteLink.href =
       `https://discord.com/oauth2/authorize` +
-      `?client_id=${data.clientId}` +
+      `?client_id=${process.env.CLIENT_ID || ""}` +
       `&scope=bot%20applications.commands` +
       `&permissions=8` +
       `&guild_id=${guildId}` +
