@@ -11,7 +11,7 @@ body {
 
 /* Navbar */
 .navbar {
-    height: 96px;                 /* Taller for big logo */
+    height: 88px;
     width: 100%;
     background: #ffffff;
     border-bottom: 1px solid #e5e7eb;
@@ -22,31 +22,17 @@ body {
     padding: 0 56px;
 }
 
-/* Logo container (icon + text) */
+/* Text logo (top-left) */
 .nav-logo {
     position: absolute;
     left: 56px;
     top: 50%;
     transform: translateY(-50%);
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    text-decoration: none;
-}
-
-/* Logo image (BIG like reference) */
-.nav-logo img {
-    height: 64px;                 /* BIG ICON */
-    width: auto;
-    display: block;
-}
-
-/* Logo text */
-.nav-logo span {
-    font-size: 28px;
-    font-weight: 700;
+    font-size: 30px;        /* BIG TEXT */
+    font-weight: 800;
     letter-spacing: 1px;
     color: #000000;
+    text-decoration: none;
     white-space: nowrap;
 }
 
@@ -75,5 +61,5 @@ body {
 }
 
 main {
-    min-height: calc(100vh - 96px);
+    min-height: calc(100vh - 88px);
 }
