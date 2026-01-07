@@ -1,12 +1,10 @@
-import fetch from "node-fetch";
-
 export async function handler(event) {
-  const code = event.queryStringParameters.code;
+  const code = event.queryStringParameters?.code;
 
   if (!code) {
     return {
       statusCode: 400,
-      body: "No code provided"
+      body: "Missing code"
     };
   }
 
@@ -31,21 +29,27 @@ export async function handler(event) {
     const tokenData = await tokenRes.json();
 
     if (!tokenData.access_token) {
-      throw new Error("No access token");
+      return {
+        statusCode: 401,
+        body: "OAuth failed"
+      };
     }
 
     return {
       statusCode: 302,
       headers: {
-        "Set-Cookie": `token=${tokenData.access_token}; HttpOnly; Path=/; SameSite=Lax`,
+        // ✅ correct, Netlify-safe cookie
+        "Set-Cookie": `token=${tokenData.access_token}; Path=/; HttpOnly; SameSite=Lax`,
         Location: "/dashboard.html"
       }
     };
 
   } catch (err) {
+    console.error("CALLBACK ERROR:", err);
+
     return {
       statusCode: 500,
-      body: "OAuth failed"
+      body: "Internal server error"
     };
   }
 }
