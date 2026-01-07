@@ -1,42 +1,79 @@
-async function loadDashboard() {
-    const res = await fetch("/.netlify/functions/me", {
-        credentials: "include"
-    });
+// ===================================================================
+// Security Max Dashboard Script
+// FULL FILE – SAFE TO REPLACE
+// ===================================================================
 
-    const user = await res.json();
-    if (!user) return;
+const serversContainer = document.getElementById("servers");
+const userNameEl = document.getElementById("user-name");
+const userAvatarEl = document.getElementById("user-avatar");
 
-    // Auth UI
-    document.getElementById("loginBtn").style.display = "none";
-    document.getElementById("userInfo").style.display = "block";
-    document.getElementById("username").textContent = user.username;
-    document.getElementById("welcomeName").textContent = user.username;
+// ------------------------------------------------
+// Fetch logged-in user info
+// ------------------------------------------------
+async function fetchUser() {
+  const res = await fetch("/.netlify/functions/me", {
+    credentials: "include"
+  });
 
-    // Servers
-    const container = document.getElementById("servers");
-    container.innerHTML = "";
+  if (!res.ok) {
+    window.location.href = "/";
+    return null;
+  }
 
-    if (!user.guilds || user.guilds.length === 0) {
-        container.innerHTML = "<p style='color:#9ca3af'>No manageable servers found.</p>";
-        return;
-    }
-
-    user.guilds.forEach(guild => {
-        const card = document.createElement("div");
-        card.className = "server-card";
-
-        const icon = guild.icon
-            ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`
-            : "https://cdn.discordapp.com/embed/avatars/0.png";
-
-        card.innerHTML = `
-            <img src="${icon}" alt="Server Icon">
-            <h3>${guild.name}</h3>
-            <span>${guild.owner ? "Owner" : "Admin"}</span>
-        `;
-
-        container.appendChild(card);
-    });
+  return res.json();
 }
 
-loadDashboard();
+// ------------------------------------------------
+// Render servers
+// ------------------------------------------------
+function renderServers(guilds) {
+  serversContainer.innerHTML = "";
+
+  const manageable = guilds.filter(g =>
+    g.owner || (Number(g.permissions) & 0x20)
+  );
+
+  if (manageable.length === 0) {
+    serversContainer.innerHTML =
+      "<p>No manageable servers found.</p>";
+    return;
+  }
+
+  manageable.forEach(server => {
+    const card = document.createElement("div");
+    card.className = "server-card";
+
+    card.addEventListener("click", () => {
+      window.location.href = `/server.html?guild=${server.id}`;
+    });
+
+    const icon = server.icon
+      ? `https://cdn.discordapp.com/icons/${server.id}/${server.icon}.png`
+      : "/assets/default-server.png";
+
+    card.innerHTML = `
+      <img src="${icon}" alt="Server Icon">
+      <h3>${server.name}</h3>
+    `;
+
+    serversContainer.appendChild(card);
+  });
+}
+
+// ------------------------------------------------
+// Init
+// ------------------------------------------------
+async function initDashboard() {
+  const data = await fetchUser();
+  if (!data) return;
+
+  const user = data.user;
+  const guilds = data.guilds;
+
+  userNameEl.textContent = `${user.username}#${user.discriminator}`;
+  userAvatarEl.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+
+  renderServers(guilds);
+}
+
+initDashboard();
