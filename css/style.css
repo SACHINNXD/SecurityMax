@@ -35,7 +35,6 @@ body {
     letter-spacing: 1px;
     color: #000000;
     text-decoration: none;
-    white-space: nowrap;
 }
 
 .nav-links {
@@ -49,7 +48,6 @@ body {
     color: #374151;
     font-size: 18px;
     font-weight: 500;
-    transition: color 0.2s ease;
 }
 
 .nav-links a:hover {
@@ -57,8 +55,8 @@ body {
 }
 
 .nav-links a.active {
-    color: #000000;
     font-weight: 700;
+    color: #000000;
 }
 
 /* ===============================
@@ -68,7 +66,6 @@ body {
 .home-hero {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     padding: 0 80px;
 }
 
@@ -81,14 +78,13 @@ body {
     font-size: 48px;
     font-weight: 800;
     margin-bottom: 16px;
-    color: #000000;
 }
 
 .hero-content p {
     font-size: 18px;
     color: #374151;
-    line-height: 1.6;
     margin-bottom: 32px;
+    line-height: 1.6;
 }
 
 .hero-button {
@@ -97,7 +93,6 @@ body {
     background: #000000;
     color: #ffffff;
     text-decoration: none;
-    font-size: 16px;
     font-weight: 600;
     border-radius: 8px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -113,22 +108,21 @@ body {
 ================================ */
 
 .announcement-wrapper {
-    width: 100%;
     display: flex;
     justify-content: center;
     margin-top: 80px;
 }
 
 .announcement-card {
-    width: 100%;
     max-width: 1000px;
+    width: 100%;
     padding: 22px 36px;
     border-radius: 16px;
     background: linear-gradient(135deg, #0f172a, #020617);
     color: #e5e7eb;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
     border: 1px solid rgba(59, 130, 246, 0.15);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    transition: all 0.25s ease;
 }
 
 .announcement-card:hover {
@@ -138,14 +132,13 @@ body {
 }
 
 .announcement-badge {
-    display: inline-block;
-    padding: 6px 14px;
-    border-radius: 999px;
-    background: rgba(16, 185, 129, 0.15);
-    color: #10b981;
     font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.5px;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.15);
+    padding: 6px 14px;
+    border-radius: 999px;
+    display: inline-block;
     margin-bottom: 6px;
 }
 
@@ -155,34 +148,28 @@ body {
     margin-bottom: 8px;
 }
 
-.announcement-card h2 {
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 6px;
-    color: #ffffff;
-}
-
-.announcement-card p {
-    font-size: 15px;
-    line-height: 1.5;
-    color: #d1d5db;
-}
-
 /* ===============================
    FEATURES
 ================================ */
 
 .features-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-top: 80px;
+    margin-top: 90px;
     margin-bottom: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.features-title {
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 40px;
+    color: #000000;
 }
 
 .features-grid {
-    width: 100%;
     max-width: 1000px;
+    width: 100%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
@@ -191,15 +178,17 @@ body {
 .feature-card {
     padding: 26px;
     text-align: center;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 600;
     border-radius: 14px;
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    color: #e5e7eb;
+    background: linear-gradient(135deg, #0f172a, #020617);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    transition: all 0.25s ease;
 }
 
 .feature-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 25px 50px rgba(59, 130, 246, 0.35);
+    border-color: rgba(59, 130, 246, 0.6);
 }
