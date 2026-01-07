@@ -1,80 +1,62 @@
-console.log("THIS IS THE NEW SERVER.JS");
+console.log("🔥 THIS IS THE NEW SERVER.JS");
 
-// ---------- HELPERS ----------
-const qs = (id) => document.getElementById(id);
-
-// ---------- ELEMENTS ----------
-const verifyEl = qs("verify");
-const inviteEl = qs("invite");
-const panelEl = qs("panel");
-
-const serverNameEl = qs("serverName");
-const serverIconEl = qs("serverIcon");
-const inviteLinkEl = qs("inviteLink");
-
-// ---------- GET GUILD ID ----------
 const params = new URLSearchParams(window.location.search);
 const guildId = params.get("guild");
 
 console.log("Guild ID:", guildId);
 
-if (!guildId) {
-  showError("Missing guild ID");
-  throw new Error("Missing guild ID");
+const verifyEl = document.getElementById("verify");
+const inviteEl = document.getElementById("invite");
+const panelEl = document.getElementById("panel");
+const inviteLink = document.getElementById("inviteLink");
+
+// Safety helper
+function showOnly(element) {
+  [verifyEl, inviteEl, panelEl].forEach(el => {
+    if (el) el.style.display = "none";
+  });
+  if (element) element.style.display = "block";
 }
 
-// ---------- VERIFY BOT ----------
-fetch(`/.netlify/functions/checkBot?guild=${guildId}`)
-  .then(async (res) => {
+async function verifyServer() {
+  if (!guildId) {
+    console.error("Missing guild ID");
+    showOnly(inviteEl);
+    return;
+  }
+
+  try {
+    const res = await fetch(`/.netlify/functions/checkBot?guild=${guildId}`);
     console.log("Status:", res.status);
-    const text = await res.text();
-    console.log("Response text:", text);
 
-    if (!res.ok) throw new Error("Request failed");
+    const data = await res.json();
+    console.log("Response text:", data);
 
-    return JSON.parse(text);
-  })
-  .then((data) => {
-    // STOP LOADER
-    verifyEl.style.display = "none";
-
-    if (data.botInServer === true) {
-      // ---------- BOT IS IN SERVER ----------
-      panelEl.style.display = "block";
-
-      serverNameEl.textContent = data.guild.name;
-
-      if (data.guild.icon) {
-        serverIconEl.src = `https://cdn.discordapp.com/icons/${data.guild.id}/${data.guild.icon}.png?size=128`;
-      } else {
-        serverIconEl.src = "/assets/logo.png";
-      }
-    } else {
-      // ---------- BOT NOT IN SERVER ----------
-      inviteEl.style.display = "flex";
-
-      inviteLinkEl.href =
+    if (!data.botInServer) {
+      inviteLink.href =
         `https://discord.com/oauth2/authorize` +
         `?client_id=1457942798644019349` +
-        `&scope=bot%20applications.commands` +
         `&permissions=8` +
-        `&guild_id=${guildId}` +
-        `&disable_guild_select=true`;
+        `&scope=bot%20applications.commands` +
+        `&guild_id=${guildId}`;
+
+      showOnly(inviteEl);
+      return;
     }
-  })
-  .catch((err) => {
+
+    // BOT IS IN SERVER
+    showOnly(panelEl);
+
+    // OPTIONAL: set title safely
+    if (data.guild?.name) {
+      document.title = `${data.guild.name} | Security Max`;
+    }
+
+  } catch (err) {
     console.error("Verification error:", err);
-    showError("Verification failed. Please refresh or try again.");
-  });
-
-// ---------- ERROR HANDLER ----------
-function showError(message) {
-  verifyEl.style.display = "none";
-  inviteEl.style.display = "none";
-  panelEl.style.display = "none";
-
-  const div = document.createElement("div");
-  div.className = "center";
-  div.innerHTML = `<h2>${message}</h2>`;
-  document.body.appendChild(div);
+    showOnly(inviteEl);
+  }
 }
+
+// Start verification
+verifyServer();
