@@ -1,15 +1,13 @@
 export async function handler() {
-  const clientId = process.env.CLIENT_ID;
+  const clientId = process.env.DISCORD_CLIENT_ID;
+  const redirectUri = process.env.DISCORD_REDIRECT_URI;
 
-  if (!clientId) {
+  if (!clientId || !redirectUri) {
     return {
       statusCode: 500,
-      body: "CLIENT_ID is missing in environment variables"
+      body: "Missing DISCORD_CLIENT_ID or DISCORD_REDIRECT_URI"
     };
   }
-
-  const redirectUri =
-    "https://securitymax-bot.netlify.app/.netlify/functions/callback";
 
   const authUrl =
     "https://discord.com/oauth2/authorize" +
