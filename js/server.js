@@ -1,58 +1,62 @@
-async function loadDashboard() {
-  let res;
+console.log("🔥 THIS IS THE NEW SERVER.JS");
 
-  try {
-    res = await fetch("/.netlify/functions/me");
-  } catch (err) {
-    console.warn("Auth check failed:", err);
-    return;
-  }
+const params = new URLSearchParams(window.location.search);
+const guildId = params.get("guild");
 
-  if (!res || res.status !== 200) {
-    // User not logged in
-    return;
-  }
+console.log("Guild ID:", guildId);
 
-  const data = await res.json();
+const verifyEl = document.getElementById("verify");
+const inviteEl = document.getElementById("invite");
+const panelEl = document.getElementById("panel");
+const inviteLink = document.getElementById("inviteLink");
 
-  // ===== SAFE ELEMENT LOOKUPS =====
-  const loginBtn = document.getElementById("loginBtn");
-  const userInfo = document.getElementById("userInfo");
-  const usernameEl = document.getElementById("username");
-  const welcomeName = document.getElementById("welcomeName");
-  const serversContainer = document.getElementById("servers");
-
-  // ===== UI UPDATE (SAFE) =====
-  if (loginBtn) loginBtn.style.display = "none";
-  if (userInfo) userInfo.style.display = "flex";
-  if (usernameEl) usernameEl.textContent = data.username;
-  if (welcomeName) welcomeName.textContent = data.username;
-
-  // ===== SERVERS LIST (ONLY IF PRESENT) =====
-  if (!serversContainer || !Array.isArray(data.guilds)) return;
-
-  serversContainer.innerHTML = "";
-
-  data.guilds.forEach(guild => {
-    const card = document.createElement("div");
-    card.className = "server-card";
-
-    const icon = guild.icon
-      ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`
-      : "/assets/logo.png";
-
-    card.innerHTML = `
-      <img src="${icon}" alt="Server Icon">
-      <span>${guild.name}</span>
-    `;
-
-    card.addEventListener("click", () => {
-      window.location.href = `/server.html?guild=${guild.id}`;
-    });
-
-    serversContainer.appendChild(card);
+// Safety helper
+function showOnly(element) {
+  [verifyEl, inviteEl, panelEl].forEach(el => {
+    if (el) el.style.display = "none";
   });
+  if (element) element.style.display = "block";
 }
 
-// Run safely on every page
-loadDashboard();
+async function verifyServer() {
+  if (!guildId) {
+    console.error("Missing guild ID");
+    showOnly(inviteEl);
+    return;
+  }
+
+  try {
+    const res = await fetch(`/.netlify/functions/checkBot?guild=${guildId}`);
+    console.log("Status:", res.status);
+
+    const data = await res.json();
+    console.log("Response text:", data);
+
+    if (!data.botInServer) {
+      inviteLink.href =
+        `https://discord.com/oauth2/authorize` +
+        `?client_id=1457942798644019349` +
+        `&permissions=8` +
+        `&scope=bot%20applications.commands` +
+        `&guild_id=${guildId}`;
+
+      showOnly(inviteEl);
+      return;
+    }
+
+    // BOT IS IN SERVER
+    showOnly(panelEl);
+
+    // OPTIONAL: set title safely
+    if (data.guild?.name) {
+      document.title = `${data.guild.name} | Security Max`;
+    }
+
+  } catch (err) {
+    console.error("Verification error:", err);
+    showOnly(inviteEl);
+  }
+}
+
+// Start verification
+verifyServer();
