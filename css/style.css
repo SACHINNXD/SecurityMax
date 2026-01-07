@@ -62,14 +62,13 @@ body {
 }
 
 /* ===============================
-   HOME HERO SECTION
+   HERO
 ================================ */
 
 .home-hero {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    min-height: calc(100vh - 88px);
     padding: 0 80px;
 }
 
@@ -92,8 +91,6 @@ body {
     margin-bottom: 32px;
 }
 
-/* CTA Button */
-
 .hero-button {
     display: inline-block;
     padding: 16px 36px;
@@ -112,7 +109,7 @@ body {
 }
 
 /* ===============================
-   ANNOUNCEMENT (CENTERED + LONG)
+   ANNOUNCEMENT
 ================================ */
 
 .announcement-wrapper {
@@ -124,17 +121,14 @@ body {
 
 .announcement-card {
     width: 100%;
-    max-width: 1000px;      /* LONG */
-    padding: 22px 36px;     /* NOT FAT */
+    max-width: 1000px;
+    padding: 22px 36px;
     border-radius: 16px;
     background: linear-gradient(135deg, #0f172a, #020617);
     color: #e5e7eb;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
     border: 1px solid rgba(59, 130, 246, 0.15);
-    transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease,
-        border-color 0.25s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .announcement-card:hover {
@@ -172,4 +166,40 @@ body {
     font-size: 15px;
     line-height: 1.5;
     color: #d1d5db;
+}
+
+/* ===============================
+   FEATURES
+================================ */
+
+.features-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 80px;
+    margin-bottom: 120px;
+}
+
+.features-grid {
+    width: 100%;
+    max-width: 1000px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.feature-card {
+    padding: 26px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 14px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
 }
