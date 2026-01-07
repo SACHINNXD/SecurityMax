@@ -157,8 +157,8 @@ body {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 90px;
-    margin-bottom: 50px;
+    margin-top: 140px;   /* ⬅️ MORE SPACE FROM ANNOUNCEMENT */
+    margin-bottom: 60px;
 }
 
 .features-title {
