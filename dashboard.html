@@ -16,9 +16,25 @@
         <li><a href="/support.html">Support</a></li>
         <li><a href="/dashboard.html" class="active">Dashboard</a></li>
     </ul>
+
+    <!-- LOGIN / USER AREA -->
+    <div class="auth-area">
+        <a
+            href="https://discord.com/oauth2/authorize?client_id=1457942798644019349&response_type=code&scope=identify%20email&redirect_uri=YOUR_REDIRECT_URL"
+            class="login-btn"
+            id="loginBtn"
+        >
+            Login with Discord
+        </a>
+
+        <div class="user-info" id="userInfo" style="display:none;">
+            <span id="username"></span>
+        </div>
+    </div>
 </nav>
 
 <main></main>
 
+<script src="/js/script.js"></script>
 </body>
 </html>
