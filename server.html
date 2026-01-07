@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Server Panel | Security Max</title>
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="stylesheet" href="/css/style.css">
@@ -56,7 +55,7 @@
       transform: translateY(-1px);
     }
 
-    /* ================= CENTER SCREENS ================= */
+    /* ================= VERIFY / INVITE ================= */
 
     .center {
       height: calc(100vh - 64px);
@@ -91,45 +90,68 @@
       text-decoration: none;
       font-weight: 600;
       font-size: 16px;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-      box-shadow: 0 10px 25px rgba(88,101,242,0.4);
     }
 
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 30px rgba(88,101,242,0.55);
-    }
-
-    /* ================= SERVER PANEL ================= */
+    /* ================= DASHBOARD LAYOUT ================= */
 
     .panel {
-      padding: 96px 40px 40px;
+      padding-top: 64px;
+      height: 100vh;
     }
 
-    .server-header {
+    .layout {
       display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 30px;
+      height: calc(100vh - 64px);
     }
 
-    .server-header img {
-      width: 64px;
-      height: 64px;
-      border-radius: 16px;
-      background: #111827;
+    .sidebar {
+      width: 240px;
+      background: rgba(255,255,255,0.03);
+      border-right: 1px solid rgba(255,255,255,0.06);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
-    .server-header h1 {
-      font-size: 28px;
-      margin: 0;
-      font-weight: 700;
+    .nav-item {
+      background: none;
+      border: none;
+      color: #cbd5f5;
+      padding: 12px 14px;
+      text-align: left;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
     }
 
-    .empty-area {
-      margin-top: 40px;
-      opacity: 0.5;
-      font-size: 14px;
+    .nav-item:hover {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+
+    .nav-item.active {
+      background: #5865F2;
+      color: #fff;
+    }
+
+    .content {
+      flex: 1;
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .section h2 {
+      margin-top: 0;
     }
   </style>
 </head>
@@ -158,16 +180,90 @@
 
   <!-- SERVER PANEL -->
   <div id="panel" class="panel" style="display:none;">
-    <div class="server-header">
-      <img id="serverIcon" alt="Server Icon">
-      <h1 id="serverName">Server</h1>
-    </div>
+    <div class="layout">
 
-    <div class="empty-area">
-      Server settings will appear here.
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <button class="nav-item active" data-target="general">General</button>
+        <button class="nav-item" data-target="antinuke">AntiNuke</button>
+        <button class="nav-item" data-target="antiraid">AntiRaid</button>
+        <button class="nav-item" data-target="monstermode">MonsterMode</button>
+        <button class="nav-item" data-target="verification">Verification</button>
+        <button class="nav-item" data-target="moderation">Moderation</button>
+        <button class="nav-item" data-target="logs">Logs</button>
+        <button class="nav-item" data-target="antispam">AntiSpam</button>
+        <button class="nav-item" data-target="whitelist">WhiteList</button>
+      </aside>
+
+      <!-- CONTENT -->
+      <main class="content">
+        <section id="general" class="section active">
+          <h2>General</h2>
+          <p>General server settings will appear here.</p>
+        </section>
+
+        <section id="antinuke" class="section">
+          <h2>AntiNuke</h2>
+          <p>Anti-nuke protection settings.</p>
+        </section>
+
+        <section id="antiraid" class="section">
+          <h2>AntiRaid</h2>
+          <p>Anti-raid system configuration.</p>
+        </section>
+
+        <section id="monstermode" class="section">
+          <h2>MonsterMode</h2>
+          <p>Extreme protection mode.</p>
+        </section>
+
+        <section id="verification" class="section">
+          <h2>Verification</h2>
+          <p>User verification settings.</p>
+        </section>
+
+        <section id="moderation" class="section">
+          <h2>Moderation</h2>
+          <p>Moderation tools.</p>
+        </section>
+
+        <section id="logs" class="section">
+          <h2>Logs</h2>
+          <p>Logging configuration.</p>
+        </section>
+
+        <section id="antispam" class="section">
+          <h2>AntiSpam</h2>
+          <p>Spam protection settings.</p>
+        </section>
+
+        <section id="whitelist" class="section">
+          <h2>WhiteList</h2>
+          <p>Whitelisted users and roles.</p>
+        </section>
+      </main>
+
     </div>
   </div>
 
+  <!-- EXISTING JS (DO NOT CHANGE) -->
   <script src="/js/server.js"></script>
+
+  <!-- SIDEBAR NAV LOGIC -->
+  <script>
+    const navItems = document.querySelectorAll(".nav-item");
+    const sections = document.querySelectorAll(".section");
+
+    navItems.forEach(btn => {
+      btn.addEventListener("click", () => {
+        navItems.forEach(b => b.classList.remove("active"));
+        sections.forEach(s => s.classList.remove("active"));
+
+        btn.classList.add("active");
+        document.getElementById(btn.dataset.target).classList.add("active");
+      });
+    });
+  </script>
+
 </body>
 </html>
