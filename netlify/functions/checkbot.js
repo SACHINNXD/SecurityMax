@@ -1,49 +1,52 @@
 export async function handler(event) {
-  const cookie = event.headers.cookie || "";
-  const token = cookie
-    .split("; ")
-    .find(c => c.startsWith("token="))
-    ?.split("=")[1];
+  const guildId = event.queryStringParameters.guild;
 
-  if (!token) {
+  if (!guildId) {
     return {
-      statusCode: 200,
-      body: JSON.stringify({ loggedIn: false })
+      statusCode: 400,
+      body: JSON.stringify({ error: "Missing guild ID" })
     };
   }
 
-  const guildId = event.queryStringParameters.guild;
-
-  // Get user guilds
-  const userGuildsRes = await fetch(
-    "https://discord.com/api/users/@me/guilds",
-    {
-      headers: { Authorization: `Bearer ${token}` }
-    }
-  );
-
-  const userGuilds = await userGuildsRes.json();
-
-  // Get bot guilds
-  const botGuildsRes = await fetch(
-    "https://discord.com/api/users/@me/guilds",
-    {
-      headers: {
-        Authorization: `Bot ${process.env.YOUR_DISCORD_BOT_TOKEN}`
+  try {
+    // Check if bot is in the guild
+    const res = await fetch(
+      `https://discord.com/api/guilds/${guildId}`,
+      {
+        headers: {
+          Authorization: `Bot ${process.env.YOUR_DISCORD_BOT_TOKEN}`
+        }
       }
+    );
+
+    if (res.status === 200) {
+      const guild = await res.json();
+
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          botInServer: true,
+          guild: {
+            id: guild.id,
+            name: guild.name,
+            icon: guild.icon
+          }
+        })
+      };
     }
-  );
 
-  const botGuilds = await botGuildsRes.json();
+    // Bot not in server
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        botInServer: false
+      })
+    };
 
-  const botInServer = botGuilds.some(g => g.id === guildId);
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      loggedIn: true,
-      botInServer,
-      clientId: process.env.CLIENT_ID
-    })
-  };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: "Failed to verify server" })
+    };
+  }
 }
