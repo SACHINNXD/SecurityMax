@@ -1,11 +1,11 @@
 export async function handler() {
-  const clientId = process.env.DISCORD_CLIENT_ID;
-  const redirectUri = process.env.DISCORD_REDIRECT_URI;
+  const clientId = process.env.CLIENT_ID;
+  const redirectUri = process.env.REDIRECT_URI;
 
   if (!clientId || !redirectUri) {
     return {
       statusCode: 500,
-      body: "Missing DISCORD_CLIENT_ID or DISCORD_REDIRECT_URI"
+      body: "Missing CLIENT_ID or REDIRECT_URI"
     };
   }
 
