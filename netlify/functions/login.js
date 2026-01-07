@@ -1,15 +1,21 @@
 export async function handler() {
-    const params = new URLSearchParams({
-        client_id: process.env.DISCORD_CLIENT_ID,
-        redirect_uri: process.env.DISCORD_REDIRECT_URI,
-        response_type: "code",
-        scope: "identify email guilds"
-    });
+  const clientId = process.env.CLIENT_ID;
 
-    return {
-        statusCode: 302,
-        headers: {
-            Location: `https://discord.com/oauth2/authorize?${params.toString()}`
-        }
-    };
+  // 🔒 HARD-CODED, SAFE
+  const redirectUri =
+    "https://securitymax-bot.netlify.app/.netlify/functions/callback";
+
+  const authUrl =
+    "https://discord.com/oauth2/authorize" +
+    "?client_id=" + clientId +
+    "&response_type=code" +
+    "&redirect_uri=" + encodeURIComponent(redirectUri) +
+    "&scope=identify email guilds";
+
+  return {
+    statusCode: 302,
+    headers: {
+      Location: authUrl
+    }
+  };
 }
