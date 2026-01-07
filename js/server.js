@@ -1,65 +1,44 @@
-// ===================================================================
-// Security Max – Server Panel Script
-// FULL FILE – SAFE TO REPLACE
-// ===================================================================
-
-const root = document.getElementById("server-root");
 const params = new URLSearchParams(window.location.search);
 const guildId = params.get("guild");
 
+const verifyEl = document.getElementById("verify");
+const inviteEl = document.getElementById("invite");
+const panelEl = document.getElementById("panel");
+const inviteLink = document.getElementById("inviteLink");
+
 if (!guildId) {
-  root.innerHTML = "<h2>Invalid server</h2>";
+  verifyEl.innerHTML = "<h2>Invalid server</h2>";
   throw new Error("Missing guild ID");
 }
 
-// Simulated verification delay (3.5s)
-setTimeout(checkServer, 3500);
+// Fake delay for smooth UX
+setTimeout(checkBot, 1500);
 
-async function checkServer() {
-  try {
-    const res = await fetch(
-      `/.netlify/functions/checkBot?guild=${guildId}`,
-      { credentials: "include" }
-    );
+async function checkBot() {
+  const res = await fetch(
+    `/.netlify/functions/checkBot?guild=${guildId}`,
+    { credentials: "include" }
+  );
 
-    if (!res.ok) {
-      root.innerHTML = "<h2>Access denied</h2>";
-      return;
-    }
+  const data = await res.json();
 
-    const data = await res.json();
+  verifyEl.style.display = "none";
 
-    if (data.inServer) {
-      showPanel(data.serverName);
-    } else {
-      showInvite(data.invite);
-    }
-
-  } catch (err) {
-    root.innerHTML = "<h2>Something went wrong</h2>";
+  if (!data.loggedIn) {
+    window.location.href = "/";
+    return;
   }
-}
 
-function showPanel(serverName) {
-  root.innerHTML = `
-    <h2>${serverName}</h2>
-    <p>Security Max is active in this server.</p>
-
-    <div class="panel">
-      <button>Anti-Raid</button>
-      <button>Moderation</button>
-      <button>Logs</button>
-    </div>
-  `;
-}
-
-function showInvite(invite) {
-  root.innerHTML = `
-    <h2>Bot is not in this server</h2>
-    <p>Invite Security Max Bot to continue.</p>
-
-    <a class="invite-btn" href="${invite}" target="_blank">
-      Invite Security Max Bot
-    </a>
-  `;
+  if (data.botInServer) {
+    panelEl.style.display = "block";
+  } else {
+    inviteEl.style.display = "flex";
+    inviteLink.href =
+      `https://discord.com/oauth2/authorize` +
+      `?client_id=${data.clientId}` +
+      `&scope=bot%20applications.commands` +
+      `&permissions=8` +
+      `&guild_id=${guildId}` +
+      `&disable_guild_select=true`;
+  }
 }
