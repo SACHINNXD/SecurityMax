@@ -3,13 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>Server Panel | Security Max</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="stylesheet" href="/css/style.css">
+
   <style>
     body {
-      background: #0b0f1a;
-      color: #fff;
-      font-family: Inter, sans-serif;
       margin: 0;
+      background: radial-gradient(circle at top, #0f172a, #020617);
+      color: #ffffff;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     .center {
@@ -22,13 +26,13 @@
     }
 
     .spinner {
-      width: 60px;
-      height: 60px;
-      border: 6px solid #222;
+      width: 64px;
+      height: 64px;
+      border: 6px solid rgba(255,255,255,0.1);
       border-top: 6px solid #5865F2;
       border-radius: 50%;
       animation: spin 1s linear infinite;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
     @keyframes spin {
@@ -36,42 +40,85 @@
     }
 
     .btn {
-      margin-top: 20px;
-      padding: 14px 22px;
-      background: #5865F2;
-      color: white;
-      border-radius: 8px;
+      margin-top: 24px;
+      padding: 14px 26px;
+      background: linear-gradient(135deg, #5865F2, #4752c4);
+      color: #fff;
+      border-radius: 10px;
       text-decoration: none;
       font-weight: 600;
+      font-size: 16px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 10px 25px rgba(88,101,242,0.4);
     }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(88,101,242,0.55);
+    }
+
+    /* SERVER PANEL */
 
     .panel {
       padding: 40px;
+    }
+
+    .server-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .server-header img {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      background: #111827;
+    }
+
+    .server-header h1 {
+      font-size: 28px;
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .empty-area {
+      margin-top: 40px;
+      opacity: 0.5;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
 
-<!-- VERIFY -->
-<div id="verify" class="center">
-  <div class="spinner"></div>
-  <h2>Verifying server…</h2>
-  <p>Please wait</p>
-</div>
+  <!-- VERIFYING -->
+  <div id="verify" class="center">
+    <div class="spinner"></div>
+    <h2>Verifying server…</h2>
+    <p>Please wait</p>
+  </div>
 
-<!-- BOT NOT IN SERVER -->
-<div id="invite" class="center" style="display:none;">
-  <h2>Bot is not in this server</h2>
-  <p>Add Security Max to continue</p>
-  <a id="inviteLink" class="btn">Invite Security Max Bot</a>
-</div>
+  <!-- BOT NOT IN SERVER -->
+  <div id="invite" class="center" style="display:none;">
+    <h2>Security Max is not in this server</h2>
+    <p>Add the bot to manage this server</p>
+    <a id="inviteLink" class="btn">Invite Security Max</a>
+  </div>
 
-<!-- SERVER PANEL -->
-<div id="panel" class="panel" style="display:none;">
-  <h1>Server Control Panel</h1>
-  <p>Security Max is active in this server.</p>
-</div>
+  <!-- SERVER PANEL (BOT IN SERVER) -->
+  <div id="panel" class="panel" style="display:none;">
+    <div class="server-header">
+      <img id="serverIcon" alt="Server Icon">
+      <h1 id="serverName">Server</h1>
+    </div>
 
-<script src="/js/server.js"></script>
+    <!-- Intentionally empty for now -->
+    <div class="empty-area">
+      Server settings will appear here.
+    </div>
+  </div>
+
+  <script src="/js/server.js"></script>
 </body>
 </html>
