@@ -1,39 +1,51 @@
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
-);
-
 export async function handler(event) {
-  if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method Not Allowed" };
-  }
+  try {
+    const { guildId, enabled } = JSON.parse(event.body || "{}");
 
-  const { guildId, enable } = JSON.parse(event.body || "{}");
+    if (!guildId) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: "Missing guildId" })
+      };
+    }
 
-  if (!guildId) {
-    return { statusCode: 400, body: "Missing guildId" };
-  }
+    const SUPABASE_URL = process.env.SUPABASE_URL;
+    const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  const { error } = await supabase
-    .from("server_settings")
-    .upsert({
-      guild_id: guildId,
-      enabled: enable,
-      updated_at: new Date()
-    });
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/server_settings?guild_id=eq.${guildId}`,
+      {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_SERVICE_KEY,
+          "Authorization": `Bearer ${SUPABASE_SERVICE_KEY}`,
+          "Content-Type": "application/json",
+          "Prefer": "resolution=merge-duplicates"
+        },
+        body: JSON.stringify({
+          guild_id: guildId,
+          enabled: enabled,
+          updated_at: new Date().toISOString()
+        })
+      }
+    );
 
-  if (error) {
-    console.error("Supabase error:", error);
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text);
+    }
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ success: true })
+    };
+
+  } catch (err) {
+    console.error("saveSettings error:", err);
+
     return {
       statusCode: 500,
-      body: "Database error"
+      body: JSON.stringify({ error: "Internal Server Error" })
     };
   }
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ success: true })
-  };
 }
