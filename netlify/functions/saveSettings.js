@@ -9,48 +9,41 @@ export async function handler(event) {
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
-      body: JSON.stringify({ error: "Method not allowed" }),
+      body: JSON.stringify({ error: "Method not allowed" })
     };
   }
 
   try {
-    const { guildId, enabled } = JSON.parse(event.body || "{}");
+    const body = JSON.parse(event.body || "{}");
+    const { guildId, enabled } = body;
 
     if (!guildId) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: "Missing guildId" }),
+        body: JSON.stringify({ error: "Missing guildId" })
       };
     }
 
     const { error } = await supabase
       .from("server_settings")
-      .upsert(
-        {
-          guild_id: guildId,
-          enabled: enabled,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: "guild_id" }
-      );
+      .upsert({
+        guild_id: guildId,
+        enabled: !!enabled,
+        updated_at: new Date().toISOString()
+      });
 
-    if (error) {
-      console.error("Supabase error:", error);
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ error: "Database error" }),
-      };
-    }
+    if (error) throw error;
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true }),
+      body: JSON.stringify({ success: true })
     };
+
   } catch (err) {
-    console.error("Handler error:", err);
+    console.error("saveSettings error:", err);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Internal server error" }),
+      body: JSON.stringify({ error: "Internal server error" })
     };
   }
 }
