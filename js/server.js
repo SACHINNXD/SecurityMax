@@ -98,28 +98,35 @@ toggle.addEventListener("click", () => {
 
 /* ================= SAVE ================= */
 
+const saveBtn = document.getElementById("saveBtn");
+
 saveBtn.addEventListener("click", async () => {
   try {
     const res = await fetch("/.netlify/functions/saveSettings", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
-        guildId: guildId,
-        enabled: pendingEnabled
+        guildId,
+        enabled: toggleEnabled
       })
     });
 
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Save failed");
+    if (!res.ok) {
+      throw new Error("Save failed");
+    }
 
-    currentEnabled = pendingEnabled;
+    console.log("Settings saved");
+    hideSavePopup();
     hasUnsavedChanges = false;
-    hidePopup();
 
-  } catch (e) {
-    console.error("Save error:", e);
+  } catch (err) {
+    console.error("Save error:", err);
+    alert("Failed to save settings");
   }
 });
+
 
 /* ================= DISCARD ================= */
 
