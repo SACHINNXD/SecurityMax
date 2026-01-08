@@ -153,6 +153,94 @@
     .section h2 {
       margin-top: 0;
     }
+
+    /* ================= ENABLE SETTING ================= */
+
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 22px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      margin-top: 20px;
+      max-width: 520px;
+    }
+
+    .setting-label {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .toggle-btn {
+      padding: 10px 28px;
+      border-radius: 999px;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .toggle-btn[data-state="off"] {
+      background: #374151;
+      color: #fff;
+    }
+
+    .toggle-btn[data-state="on"] {
+      background: #22c55e;
+      color: #020617;
+    }
+
+    /* ================= SAVE BAR ================= */
+
+    .save-bar {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #020617;
+      border: 1px solid #3b82f6;
+      padding: 14px 22px;
+      border-radius: 14px;
+      display: none;
+      align-items: center;
+      gap: 18px;
+      z-index: 9999;
+    }
+
+    .save-bar.show {
+      display: flex;
+    }
+
+    .save-actions button {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .save-btn {
+      background: #22c55e;
+      color: #020617;
+    }
+
+    .discard-btn {
+      background: #ef4444;
+      color: #ffffff;
+    }
+
+    .save-bar.shake {
+      animation: shake 0.3s;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(-50%) translateX(0); }
+      25% { transform: translateX(-50%) translateX(-6px); }
+      50% { transform: translateX(-50%) translateX(6px); }
+      75% { transform: translateX(-50%) translateX(-6px); }
+      100% { transform: translateX(-50%) translateX(0); }
+    }
   </style>
 </head>
 
@@ -197,70 +285,91 @@
 
       <!-- CONTENT -->
       <main class="content">
+
+        <!-- GENERAL -->
         <section id="general" class="section active">
           <h2>General</h2>
           <p>General server settings will appear here.</p>
+
+          <!-- ENABLE SETTING -->
+          <div class="setting-row">
+            <span class="setting-label">Enable</span>
+            <button class="toggle-btn" id="enableToggle" data-state="off">OFF</button>
+          </div>
         </section>
 
-        <section id="antinuke" class="section">
-          <h2>AntiNuke</h2>
-          <p>Anti-nuke protection settings.</p>
-        </section>
+        <section id="antinuke" class="section"><h2>AntiNuke</h2></section>
+        <section id="antiraid" class="section"><h2>AntiRaid</h2></section>
+        <section id="monstermode" class="section"><h2>MonsterMode</h2></section>
+        <section id="verification" class="section"><h2>Verification</h2></section>
+        <section id="moderation" class="section"><h2>Moderation</h2></section>
+        <section id="logs" class="section"><h2>Logs</h2></section>
+        <section id="antispam" class="section"><h2>AntiSpam</h2></section>
+        <section id="whitelist" class="section"><h2>WhiteList</h2></section>
 
-        <section id="antiraid" class="section">
-          <h2>AntiRaid</h2>
-          <p>Anti-raid system configuration.</p>
-        </section>
-
-        <section id="monstermode" class="section">
-          <h2>MonsterMode</h2>
-          <p>Extreme protection mode.</p>
-        </section>
-
-        <section id="verification" class="section">
-          <h2>Verification</h2>
-          <p>User verification settings.</p>
-        </section>
-
-        <section id="moderation" class="section">
-          <h2>Moderation</h2>
-          <p>Moderation tools.</p>
-        </section>
-
-        <section id="logs" class="section">
-          <h2>Logs</h2>
-          <p>Logging configuration.</p>
-        </section>
-
-        <section id="antispam" class="section">
-          <h2>AntiSpam</h2>
-          <p>Spam protection settings.</p>
-        </section>
-
-        <section id="whitelist" class="section">
-          <h2>WhiteList</h2>
-          <p>Whitelisted users and roles.</p>
-        </section>
       </main>
-
     </div>
   </div>
 
-  <!-- EXISTING JS (DO NOT CHANGE) -->
+  <!-- SAVE BAR -->
+  <div class="save-bar" id="saveBar">
+    <span>You have unsaved changes</span>
+    <div class="save-actions">
+      <button class="save-btn" id="saveBtn">Save</button>
+      <button class="discard-btn" id="discardBtn">Discard</button>
+    </div>
+  </div>
+
+  <!-- EXISTING JS -->
   <script src="/js/server.js"></script>
 
-  <!-- SIDEBAR NAV LOGIC -->
+  <!-- EXTENDED LOGIC (ADD-ONLY) -->
   <script>
-    const navItems = document.querySelectorAll(".nav-item");
-    const sections = document.querySelectorAll(".section");
+    let dirty = false;
+    let enableState = false;
 
-    navItems.forEach(btn => {
-      btn.addEventListener("click", () => {
-        navItems.forEach(b => b.classList.remove("active"));
-        sections.forEach(s => s.classList.remove("active"));
+    const toggle = document.getElementById("enableToggle");
+    const saveBar = document.getElementById("saveBar");
+    const saveBtn = document.getElementById("saveBtn");
+    const discardBtn = document.getElementById("discardBtn");
 
-        btn.classList.add("active");
-        document.getElementById(btn.dataset.target).classList.add("active");
+    toggle.addEventListener("click", () => {
+      enableState = !enableState;
+      toggle.dataset.state = enableState ? "on" : "off";
+      toggle.textContent = enableState ? "ON" : "OFF";
+      dirty = true;
+      saveBar.classList.add("show");
+    });
+
+    discardBtn.addEventListener("click", () => {
+      enableState = false;
+      toggle.dataset.state = "off";
+      toggle.textContent = "OFF";
+      dirty = false;
+      saveBar.classList.remove("show");
+    });
+
+    saveBtn.addEventListener("click", async () => {
+      await fetch("/.netlify/functions/saveSettings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          guildId: window.currentGuildId,
+          enable: enableState
+        })
+      });
+      dirty = false;
+      saveBar.classList.remove("show");
+    });
+
+    // Extend sidebar logic (do not replace)
+    document.querySelectorAll(".nav-item").forEach(btn => {
+      btn.addEventListener("click", e => {
+        if (dirty) {
+          e.stopImmediatePropagation();
+          saveBar.classList.add("shake");
+          setTimeout(() => saveBar.classList.remove("shake"), 300);
+        }
       });
     });
   </script>
