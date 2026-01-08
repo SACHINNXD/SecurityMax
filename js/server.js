@@ -3,6 +3,9 @@ console.log("🔥 THIS IS THE NEW SERVER.JS");
 const params = new URLSearchParams(window.location.search);
 const guildId = params.get("guild");
 
+/* ✅ ADD THIS LINE (REQUIRED) */
+window.currentGuildId = guildId;
+
 console.log("Guild ID:", guildId);
 
 const verifyEl = document.getElementById("verify");
@@ -44,7 +47,7 @@ async function verifyServer() {
       return;
     }
 
-    // BOT IS IN SERVER
+    // ✅ BOT IS IN SERVER
     showOnly(panelEl);
 
     // OPTIONAL: set title safely
