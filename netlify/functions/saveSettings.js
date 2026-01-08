@@ -2,18 +2,18 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
+  process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
 export async function handler(event) {
-  if (event.httpMethod !== "POST") {
-    return {
-      statusCode: 405,
-      body: JSON.stringify({ error: "Method not allowed" })
-    };
-  }
-
   try {
+    if (event.httpMethod !== "POST") {
+      return {
+        statusCode: 405,
+        body: JSON.stringify({ error: "Method not allowed" })
+      };
+    }
+
     const body = JSON.parse(event.body || "{}");
     const { guildId, enabled } = body;
 
@@ -28,11 +28,14 @@ export async function handler(event) {
       .from("server_settings")
       .upsert({
         guild_id: guildId,
-        enabled: !!enabled,
+        enabled: Boolean(enabled),
         updated_at: new Date().toISOString()
       });
 
-    if (error) throw error;
+    if (error) {
+      console.error("Supabase error:", error);
+      throw error;
+    }
 
     return {
       statusCode: 200,
@@ -40,7 +43,7 @@ export async function handler(event) {
     };
 
   } catch (err) {
-    console.error("saveSettings error:", err);
+    console.error("SaveSettings error:", err);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: "Internal server error" })
