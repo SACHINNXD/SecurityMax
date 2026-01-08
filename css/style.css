@@ -362,3 +362,47 @@ body {
     color: #9ca3af;
 }
 
+/* ======================================================
+   HOME PAGE – VISUAL ENHANCEMENTS (SAFE OVERRIDES)
+   (Does NOT remove or shrink anything)
+====================================================== */
+
+/* Make hero heading feel bigger + glowing without changing layout */
+.hero-content h1 {
+    text-shadow:
+        0 0 18px rgba(0, 0, 0, 0.22),
+        0 0 40px rgba(0, 0, 0, 0.12);
+}
+
+/* Slightly stronger paragraph presence */
+.hero-content p {
+    font-size: 20px; /* was 18px – slightly bigger, not smaller */
+}
+
+/* Premium glowing button (no size reduction) */
+.hero-button {
+    box-shadow:
+        0 18px 35px rgba(0, 0, 0, 0.35),
+        0 0 0 rgba(59, 130, 246, 0);
+}
+
+.hero-button:hover {
+    transform: scale(1.08);
+    box-shadow:
+        0 28px 55px rgba(0, 0, 0, 0.45),
+        0 0 30px rgba(59, 130, 246, 0.35);
+}
+
+/* Features title glow (keeps same size) */
+.features-title {
+    text-shadow:
+        0 0 24px rgba(0, 0, 0, 0.22),
+        0 0 48px rgba(0, 0, 0, 0.10);
+}
+
+/* Feature cards slightly more premium on hover */
+.feature-card:hover {
+    box-shadow:
+        0 30px 60px rgba(59,130,246,0.40);
+}
+
